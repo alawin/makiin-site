@@ -1,0 +1,21 @@
+{
+  "name": "makiin-studio",
+  "compatibility_date": "2026-11-22",
+
+  // Same setup as KATA and glhfdev: the public *.workers.dev entrance and per-version
+  // preview URLs stay closed, so the custom domain is the only way in.
+  "workers_dev": false,
+  "preview_urls": false,
+
+  // www is the canonical host (canonical tag, JSON-LD @id, sitemap and robots.txt all use it),
+  // so it must resolve. The apex needs a 301 to www: a Redirect Rule in Cloudflare.
+  "routes": [
+    { "pattern": "makiinstudio.com", "custom_domain": true },
+    { "pattern": "www.makiinstudio.com", "custom_domain": true }
+  ],
+
+  "assets": {
+    "directory": "./",
+    "not_found_handling": "none"
+  }
+}
