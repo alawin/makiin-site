@@ -178,10 +178,10 @@ div:has(>[data-chstate]){flex-wrap:wrap!important;gap:4px 16px!important}
     <span data-counterlabel="" style="min-width:84px;text-transform:uppercase;white-space:nowrap"></span>
   </div>
   <nav class="mk-nav" style="justify-self:end;display:flex;flex-wrap:nowrap;white-space:nowrap;justify-content:flex-end;gap:clamp(10px,1.4vw,22px);pointer-events:{{ navPe }};opacity:{{ navOp }};transition:opacity .3s;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase">
-    <a href="#philosophy">{{ L.philo }}</a>
-    <a href="#services">{{ L.services }}</a>
-    <a href="#work">{{ L.navWork }}</a>
-    <a href="#studio">{{ L.studio }}</a>
+    <a href="#philosophy" onClick="{{ navGo }}">{{ L.philo }}</a>
+    <a href="#services" onClick="{{ navGo }}">{{ L.services }}</a>
+    <a href="#work" onClick="{{ navGo }}">{{ L.navWork }}</a>
+    <a href="#studio" onClick="{{ navGo }}">{{ L.studio }}</a>
     <button onClick="{{ toggleLang }}" style="font:inherit;letter-spacing:inherit;text-transform:inherit;color:#E8E2D8;opacity:0.6" style-hover="opacity:1">{{ L.other }}</button>
   </nav>
 </header>
@@ -1124,7 +1124,7 @@ class Component extends DCLogic {
     if (full && !mob) gl.deskFlex = 'flex';
     const vals = {
       root: this.root, L: Lv, gl, headerOp: full && this.state.open >= 0 ? 0 : 1,
-      navPe: this.state.open >= 0 ? 'none' : 'auto', navOp: this.state.open >= 0 && mob ? 0 : 1,
+      navPe: this.state.open >= 0 && mob ? 'none' : 'auto', navOp: this.state.open >= 0 && mob ? 0 : 1,
       ch0: chv(0), ch1: chv(1), ch2: chv(2),
       chCols: mob ? 'minmax(0,1fr)' : 'minmax(0,5fr) minmax(0,7fr)', chRows: mob ? 'minmax(0,1.1fr) minmax(0,0.9fr)' : 'minmax(0,1fr)', chImgOrder: mob ? -1 : 0,
       chTop: mob ? 'clamp(110px,18vh,150px)' : 'clamp(120px,22vh,220px)',
@@ -1141,6 +1141,7 @@ class Component extends DCLogic {
       prevLabel: mob ? '←' : L.prev, nextLabel: mob ? '→' : L.nextF,
       fullLabel: full ? L.exitFull : L.full, closeLabel: mob ? L.closeS : L.close,
       toggleLang: () => this.setState({ lang: lang === 'en' ? 'id' : 'en' }),
+      navGo: () => { if (this.state.open >= 0) this.closeG(); },
       chooseEn: () => this.choose('en'), chooseId: () => this.choose('id'),
       words: "Architecture that doesn't impose — but belongs.".split(' '),
       services: this.services.map((s, i) => ({
