@@ -364,13 +364,13 @@ div:has(>[data-chstate]){flex-wrap:wrap!important;gap:4px 16px!important}
           </div>
           <div data-chframe="" style="position:relative;min-height:0;order:{{ chImgOrder }}">
           <div data-chimg="0" style="position:absolute;inset:0;overflow:hidden;clip-path:inset(100% 0 0 0);background:{{ ch0.bg }}">
-            <img data-chimgi="" src="{{ ch0.src }}" alt="{{ ch0.alt }}" style="position:absolute;inset:{{ ch0.pad }};width:{{ ch0.w }};height:{{ ch0.w }};object-fit:{{ ch0.fit }};transform:scale(1.1)">
+            <img data-chimgi="" loading="lazy" src="{{ ch0.src }}" alt="{{ ch0.alt }}" style="position:absolute;inset:{{ ch0.pad }};width:{{ ch0.w }};height:{{ ch0.w }};object-fit:{{ ch0.fit }};transform:scale(1.1)">
           </div>
           <div data-chimg="1" style="position:absolute;inset:0;overflow:hidden;clip-path:inset(100% 0 0 0);background:{{ ch1.bg }}">
-            <img data-chimgi="" src="{{ ch1.src }}" alt="{{ ch1.alt }}" style="position:absolute;inset:{{ ch1.pad }};width:{{ ch1.w }};height:{{ ch1.w }};object-fit:{{ ch1.fit }};transform:scale(1.1)">
+            <img data-chimgi="" loading="lazy" src="{{ ch1.src }}" alt="{{ ch1.alt }}" style="position:absolute;inset:{{ ch1.pad }};width:{{ ch1.w }};height:{{ ch1.w }};object-fit:{{ ch1.fit }};transform:scale(1.1)">
           </div>
           <div data-chimg="2" style="position:absolute;inset:0;overflow:hidden;clip-path:inset(100% 0 0 0);background:{{ ch2.bg }}">
-            <img data-chimgi="" src="{{ ch2.src }}" alt="{{ ch2.alt }}" style="position:absolute;inset:{{ ch2.pad }};width:{{ ch2.w }};height:{{ ch2.w }};object-fit:{{ ch2.fit }};transform:scale(1.1)">
+            <img data-chimgi="" loading="lazy" src="{{ ch2.src }}" alt="{{ ch2.alt }}" style="position:absolute;inset:{{ ch2.pad }};width:{{ ch2.w }};height:{{ ch2.w }};object-fit:{{ ch2.fit }};transform:scale(1.1)">
           </div>
             <div style="position:absolute;left:-1px;top:-1px;width:13px;height:1px;background:#0A0C0C"></div>
             <div style="position:absolute;left:-1px;top:-1px;width:1px;height:13px;background:#0A0C0C"></div>
@@ -1064,8 +1064,11 @@ class Component extends DCLogic {
     c.style.transitionDelay = '650ms'; c.style.opacity = 1;
     this.setCounter(i);
   }
-  componentDidUpdate(pp, ps) {
+  componentDidUpdate() {
     const s = this.state;
+    // The runtime passes only prevProps, so keep the previous state here instead of reading a second argument.
+    const ps = this.prevGalleryState || {};
+    this.prevGalleryState = { frame: s.frame, shown: s.shown, mob: s.mob, open: s.open };
     if (s.open < 0 || (ps.frame === s.frame && ps.shown === s.shown && ps.mob === s.mob && ps.open === s.open)) return;
     requestAnimationFrame(() => {
       const rail = this.q('[data-rail="' + s.shown + '"]'); if (!rail) return;
