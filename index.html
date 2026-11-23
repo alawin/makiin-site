@@ -850,7 +850,28 @@ class Component extends DCLogic {
     const list = this.critical.concat(this.projects.slice(0, 5).map(p => p.hero));
     const fonts = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
     Promise.race([Promise.all(list.map(img).concat([fonts])), new Promise(r => setTimeout(r, 20000))])
-      .then(() => { this.q('[data-lmark]').style.transition = 'opacity .6s ease'; this.q('[data-lmark]').style.opacity = 0; this.choose('en'); });
+      .then(() => {
+        // First visit in a tab session: let the intro video play to its last frame before handing off.
+        // Later visits, reduced motion and a broken video skip the wait, so nobody is held longer than needed.
+        let seen = false;
+        try { seen = sessionStorage.getItem('mk-intro') === '1'; } catch (e) {}
+        const waitForVideo = new Promise(res => {
+          if (this.reduce || seen) return res();
+          const t0 = performance.now();
+          const chk = () => {
+            const broken = v.error || v.networkState === 3;
+            const near = v.duration > 0 && v.currentTime >= v.duration - 0.25;
+            if (broken || performance.now() - t0 > 9000) return res();
+            if (near) { v.loop = false; return res(); }
+            setTimeout(chk, 100);
+          };
+          chk();
+        });
+        waitForVideo.then(() => {
+          try { sessionStorage.setItem('mk-intro', '1'); } catch (e) {}
+          this.q('[data-lmark]').style.transition = 'opacity .6s ease'; this.q('[data-lmark]').style.opacity = 0; this.choose('en');
+        });
+      });
   }
   showGate(instant) {
     const g = this.q('[data-gate]'), m = this.q('[data-lmark]');
