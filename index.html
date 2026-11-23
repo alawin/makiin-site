@@ -610,10 +610,10 @@ div:has(>[data-chstate]){flex-wrap:wrap!important;gap:4px 16px!important}
               <div style="position:absolute;inset:{{ f.pad }}"><img src="{{ f.src }}" alt="{{ f.alt }}" loading="lazy" draggable="false" style="display:block;width:100%;height:100%;object-fit:contain;pointer-events:none"></div>
             </div>
           </sc-for>
-          <button data-garrow="" onClick="{{ prevFrame }}" aria-label="Previous image" style="position:absolute;left:0;top:0;bottom:0;width:{{ gl.arrowW }};display:flex;align-items:center;justify-content:flex-start;padding-left:{{ gl.arrowPad }};cursor:w-resize;opacity:0;transition:opacity .3s" style-hover="opacity:1">
+          <button data-garrow="" onClick="{{ prevFrame }}" aria-label="Previous image" style="position:absolute;left:0;top:0;bottom:0;width:{{ gl.arrowW }};display:flex;align-items:center;justify-content:flex-start;padding-left:{{ gl.arrowPad }};cursor:w-resize;opacity:{{ gl.arrowOp }};transition:opacity .3s" style-hover="opacity:1">
             <span style="display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;font-variant-numeric:tabular-nums;color:#E8E2D8;text-shadow:0 1px 10px rgba(10,12,12,0.8)"><span style="width:22px;height:1px;background:#E8E2D8"></span>{{ L.prevS }}</span>
           </button>
-          <button data-garrow="" onClick="{{ nextFrame }}" aria-label="Next image" style="position:absolute;right:0;top:0;bottom:0;width:{{ gl.arrowW }};display:flex;align-items:center;justify-content:flex-end;padding-right:{{ gl.arrowPad }};cursor:e-resize;opacity:0;transition:opacity .3s" style-hover="opacity:1">
+          <button data-garrow="" onClick="{{ nextFrame }}" aria-label="Next image" style="position:absolute;right:0;top:0;bottom:0;width:{{ gl.arrowW }};display:flex;align-items:center;justify-content:flex-end;padding-right:{{ gl.arrowPad }};cursor:e-resize;opacity:{{ gl.arrowOp }};transition:opacity .3s" style-hover="opacity:1">
             <span style="display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;font-variant-numeric:tabular-nums;color:#E8E2D8;text-shadow:0 1px 10px rgba(10,12,12,0.8)">{{ L.nextS }}<span style="width:22px;height:1px;background:#E8E2D8"></span></span>
           </button>
           <div style="position:absolute;left:-1px;top:-1px;width:13px;height:1px;background:#8E9694;pointer-events:none;opacity:{{ gl.chromeOp }}"></div>
@@ -1123,7 +1123,7 @@ class Component extends DCLogic {
       capL: 'clamp(120px,12vw,180px)', capR: 'clamp(24px,24vw,340px)', capT: '70px', deskFlex: 'flex', mobFlex: 'none',
       ctrlB: '40px', ctrlGap: '28px', ticksW: '240px', arrowW: '28%', arrowPad: '24px'
     };
-    Object.assign(gl, { chromeOp: full ? 0 : 1, chromePe: full ? 'none' : 'auto', cursor: full ? 'zoom-out' : 'zoom-in' });
+    Object.assign(gl, { chromeOp: full ? 0 : 1, chromePe: full ? 'none' : 'auto', cursor: full ? 'zoom-out' : 'zoom-in', arrowOp: mob ? 0 : 0.85 });
     if (full && !mob) gl.deskFlex = 'flex';
     const vals = {
       root: this.root, L: Lv, gl, headerOp: full && this.state.open >= 0 ? 0 : 1,
