@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>404 | MAKIIN Architecture Studio</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0A0C0C">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<style>
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/IBMPlexMono-400.woff2) format('woff2')}
+@font-face{font-family:'Outfit';font-style:normal;font-weight:300;font-display:swap;src:url(/fonts/Outfit-300.woff2) format('woff2')}
+@font-face{font-family:'Playfair Display';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/PlayfairDisplay-400.woff2) format('woff2')}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#0A0C0C;color:#E8E2D8}
+body{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;padding:96px 24px 64px;position:relative;overflow-x:hidden;font-family:'Outfit',sans-serif;font-weight:300}
+.mist{position:fixed;inset:-20%;pointer-events:none;background:
+  radial-gradient(40% 30% at 30% 40%,rgba(142,150,148,0.16),transparent 70%),
+  radial-gradient(45% 35% at 72% 62%,rgba(142,150,148,0.12),transparent 70%),
+  radial-gradient(60% 40% at 50% 100%,rgba(232,226,216,0.07),transparent 70%);
+  animation:drift 40s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translate3d(-3%,-2%,0) scale(1)}to{transform:translate3d(3%,2%,0) scale(1.08)}}
+.logo{position:fixed;left:32px;top:26px;line-height:0}
+.logo img{display:block;height:22px;width:auto;filter:invert(1) brightness(.92)}
+.light{position:relative;width:10px;height:10px;border-radius:50%;background:#E0B173;box-shadow:0 0 24px 6px rgba(224,177,115,0.55);animation:pulse 3.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.45;transform:scale(.8)}50%{opacity:1;transform:scale(1.25)}}
+.code{position:relative;margin:0;font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:12px;letter-spacing:.14em;color:#8E9694}
+.poem{position:relative;text-align:center;font-family:'Playfair Display',serif;font-weight:400;font-size:clamp(18px,2.1vw,26px);line-height:1.55;max-width:34ch}
+.poem p{margin:0}
+.back{position:relative;display:flex;align-items:center;justify-content:center;width:min(560px,100%);min-height:76px;padding:20px 28px;background:#E8E2D8;color:#0A0C0C;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:16px;letter-spacing:.12em;text-transform:uppercase}
+.back:hover{background:#FFFFFF}
+.back:focus-visible{outline:2px solid #E0B173;outline-offset:4px}
+.lang{position:fixed;right:32px;top:26px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#8E9694;background:none;border:0;cursor:pointer;padding:8px}
+.lang:hover,.lang:focus-visible{color:#E8E2D8}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){.mist,.light{animation:none}.light{opacity:1}}
+@media (max-width:640px){.logo{left:20px}.lang{right:12px}}
+</style>
+</head>
+<body>
+<div class="mist" aria-hidden="true"></div>
+<a class="logo" href="/" aria-label="MAKIIN"><img src="/assets/makiin-logo.svg" alt="MAKIIN"></a>
+<button class="lang" type="button" data-lang aria-label="Language">ID</button>
+<div class="light" aria-hidden="true"></div>
+<h1 class="code">404</h1>
+<div class="poem" data-l="en">
+<p>You've drifted away from the proper track,</p>
+<p>Though halfway through, you're looking back.</p>
+<p>Explore the spaces of the sacred land,</p>
+<p>Where every corner has a tale at hand.</p>
+<p>Return to the core of every design,</p>
+<p>Let His pure guidance clearly shine,</p>
+<p>Lighting the path with a light divine.</p>
+</div>
+<div class="poem" data-l="id" hidden>
+<p>Anda menyimpang dari arah,</p>
+<p>Padahal perjalanan sudah separuh langkah.</p>
+<p>Jelajahi ruang di ranah abah,</p>
+<p>Di mana setiap sudut berkisah.</p>
+<p>Kepada inti desain kembalilah,</p>
+<p>Biarkan petunjuk-Nya nyata tercerah,</p>
+<p>Menuntun arah dengan cahaya sah.</p>
+</div>
+<a class="back" data-l="en" href="/">Back to Main Page</a>
+<a class="back" data-l="id" href="/id/" hidden>Kembali ke Halaman Utama</a>
+<script>
+(function () {
+  var lang = /^\/id(\/|$)/.test(location.pathname) || (!/^\/id/.test(location.pathname) && (navigator.language || '').slice(0, 2) === 'id') ? 'id' : 'en';
+  var btn = document.querySelector('[data-lang]');
+  function set(l) {
+    lang = l;
+    document.documentElement.lang = l;
+    document.querySelectorAll('[data-l]').forEach(function (el) { el.hidden = el.getAttribute('data-l') !== l; });
+    btn.textContent = l === 'en' ? 'ID' : 'EN';
+  }
+  btn.addEventListener('click', function () { set(lang === 'en' ? 'id' : 'en'); });
+  set(lang);
+})();
+</script>
+</body>
+</html>
