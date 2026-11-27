@@ -10,6 +10,7 @@ Domain: makiinstudio.com, canonical host www.makiinstudio.com.
 - `assets/`: logo, favicon, OG image, loader video.
 - `robots.txt`, `_headers`, `.assetsignore`, `wrangler.jsonc`: SEO and deploy config.
 
-After any edit to `index.html`: `node scripts/build-routes.mjs`, then deploy.
+After any edit to `index.html`: `node scripts/snapshot.mjs && node scripts/build-routes.mjs`, then deploy.
+`snapshot.mjs` needs `npm install` once inside `scripts/`. It stores the rendered copy that goes into `<noscript>` for crawlers without JavaScript.
 Deploy: `npx wrangler deploy`, then `git push` in the same step.
 Check: `node ~/Sites/glhf-tools/seo-guard.mjs . --live https://www.makiinstudio.com`.

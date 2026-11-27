@@ -8,3 +8,9 @@ uploads/*/MANIFEST.txt
 .wrangler
 .nojekyll
 scripts
+AGENTS.md
+BACKLOG.md
+NOTES.md
+HANDOFF.md
+plans
+evidence

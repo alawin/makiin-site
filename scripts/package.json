@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "type": "module",
+  "devDependencies": { "playwright-core": "1.66.0-alpha-2026-11-18" }
+}

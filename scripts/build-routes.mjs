@@ -1,9 +1,9 @@
 // Generates the per-route pages from index.html, which is the single source of truth.
 // Every route is the same app: only the <head> block between the mk:head markers, the
-// <html lang>, and a project summary in <noscript> change. Run after editing index.html:
+// <html lang>, and the crawlable <noscript> copy (home: rendered text from snapshot.json; project: summary) change. Run after editing index.html:
 //   node scripts/build-routes.mjs
 // Outputs: id/index.html, projects/<slug>/index.html, id/projects/<slug>/index.html, sitemap.xml.
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,6 +12,9 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ORIGIN = 'https://www.makiinstudio.com';
 const UPLOADS = '/uploads/MAKIIN-WEB-ASSETS-WEBP-v1.0_2026-10-02/';
 const src = readFileSync(join(root, 'index.html'), 'utf8');
+// Visible copy per language, rendered by scripts/snapshot.mjs. Missing file: fall back to the link list only.
+const snapPath = join(root, 'scripts/snapshot.json');
+const snap = existsSync(snapPath) ? JSON.parse(readFileSync(snapPath, 'utf8')) : {};
 
 const slugs = [...src.match(/slugs = \[([^\]]+)\]/)[1].matchAll(/'([^']+)'/g)].map(m => m[1]);
 const projects = [...src.matchAll(/\{ name: '([^']+)', type: '(\w+)', place: '([^']+)', year: '(\d+)'/g)]
@@ -71,7 +74,9 @@ function noscript(lang, i) {
       `<img src="${hero}" alt="${esc(p.name)}" width="1200"></main></noscript>`;
   }
   const links = projects.map((p, k) => `<li><a href="${urlFor(lang, k).replace(ORIGIN, '')}">${esc(p.name)}</a></li>`).join('');
-  return `<noscript><nav><ul>${links}</ul></nav></noscript>`;
+  const body = (snap[lang] || []).filter(x => !(x.tag === 'h2' && projects.some(p => p.name === x.text))).map(x => `<${x.tag}>${esc(x.text).replace(/&quot;/g, '"')}</${x.tag}>`).join('');
+  const email = '<p><a href="mailto:info@makiinstudio.com">info@makiinstudio.com</a></p>';
+  return `<noscript><main>${body}<nav><ul>${links}</ul></nav>${email}</main></noscript>`;
 }
 
 function render(lang, i) {
