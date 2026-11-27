@@ -74,7 +74,7 @@ function noscript(lang, i) {
       `<img src="${hero}" alt="${esc(p.name)}" width="1200"></main></noscript>`;
   }
   const links = projects.map((p, k) => `<li><a href="${urlFor(lang, k).replace(ORIGIN, '')}">${esc(p.name)}</a></li>`).join('');
-  const body = (snap[lang] || []).filter(x => !(x.tag === 'h2' && projects.some(p => p.name === x.text))).map(x => `<${x.tag}>${esc(x.text).replace(/&quot;/g, '"')}</${x.tag}>`).join('');
+  const body = (snap[lang] || []).filter(x => !(x.tag === 'h2' && projects.some(p => p.name === x.text))).map(x => { const tag = x.tag === 'h1' ? 'h2' : x.tag; /* the template already carries the page h1 */ return `<${tag}>${esc(x.text).replace(/&quot;/g, '"')}</${tag}>`; }).join('');
   const email = '<p><a href="mailto:info@makiinstudio.com">info@makiinstudio.com</a></p>';
   return `<noscript><main>${body}<nav><ul>${links}</ul></nav>${email}</main></noscript>`;
 }
