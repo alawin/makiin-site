@@ -25,7 +25,7 @@ Install GA4 (and GTM if Jivan wants it), define conversion events, send `page_vi
 - [ ] Consent behaviour is decided by `legal`. Banner and default-denied are live (2026-11-28). Done 2026-11-28: gtm.js loads only after Allow (basic mode), tested local and live: no tag, hits or cookies before a choice or after Decline. legal still has not answered whether this is enough.
 - [ ] Internal and developer traffic filters created in Testing state, then Active after checking (our test visits are in the data).
 - [ ] "Cookie settings" link in the footer calls `window.mkConsentOpen()` (needs a template edit).
-- [ ] Lighthouse mobile median re-measured with `lh-range.mjs` and compared with the 94 to 99 range before tags. 2026-11-28: mobile 89-90 median 90 with Google tags allowed, mobile 90 median 90 with GA blocked, desktop 100. The drop is not from GA. Cause not isolated yet (changes since the 95 median: vendor files self-hosted, GTM snippet, cookie banner, WhatsApp button, noscript copy).
+- [ ] Lighthouse mobile median re-measured with `lh-range.mjs` and compared with the 94 to 99 range before tags. 2026-11-28 result: mobile median 90 live (GA blocked or allowed), desktop 100. Bisected locally by commit: 95c6246 median 98.5, abdfb24 median 97, d12af1b (React and ReactDOM served from /vendor) 90, and every later commit 90. At d12af1b FCP went 2.1s to 1.3s and LCP 2.1s to 1.3s, TBT and CLS unchanged, Speed Index went 2.1s to 13.1s. So the drop is Speed Index only. Why Speed Index moved is not proven (likely the intro and loader animation now being measured from an earlier start). The banner, GTM, WhatsApp button and noscript did not move the score.
 - [ ] Setup screenshots saved in `evidence/` with an `INDEX.md` row each.
 
 ---
