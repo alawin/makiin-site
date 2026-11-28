@@ -11,7 +11,7 @@ Status flow: `todo → planned → in_progress → done`
 ---
 
 #### E1.1 Tracking setup
-**Status:** `[todo]` | **Estimate:** QUESTION for Jivan | **Depends on:** GA4 and GTM IDs from Jivan
+**Status:** `[in_progress]` | **Estimate:** QUESTION for Jivan | **Depends on:** Jivan checking GA4 Realtime
 **Plan:** none yet
 
 Install GA4 (and GTM if Jivan wants it), define conversion events, send `page_view` on each `pushState` route change, re-measure Lighthouse after.
@@ -22,7 +22,9 @@ Install GA4 (and GTM if Jivan wants it), define conversion events, send `page_vi
 **Acceptance Criteria:**
 - [ ] GA4 Realtime shows a pageview when the home page loads and when a project opens (check what the page shows).
 - [ ] A conversion event is defined for the email link click.
-- [ ] Consent behaviour is decided by `legal`, then implemented.
+- [ ] Consent behaviour is decided by `legal`. Banner and default-denied are live (2026-11-28). Open: hits still go out after Decline (no cookies). Decide whether that is acceptable or the container must block them.
+- [ ] Internal and developer traffic filters created in Testing state, then Active after checking (our test visits are in the data).
+- [ ] "Cookie settings" link in the footer calls `window.mkConsentOpen()` (needs a template edit).
 - [ ] Lighthouse mobile median re-measured with `lh-range.mjs` and compared with the 94 to 99 range before tags.
 - [ ] Setup screenshots saved in `evidence/` with an `INDEX.md` row each.
 
