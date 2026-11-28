@@ -2,3 +2,4 @@ uploads/*/MANIFEST.txt
 .DS_Store
 .wrangler
 node_modules
+evidence/
