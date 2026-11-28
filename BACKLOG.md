@@ -25,7 +25,7 @@ Install GA4 (and GTM if Jivan wants it), define conversion events, send `page_vi
 - [ ] Consent behaviour is decided by `legal`. Banner and default-denied are live (2026-11-28). Open: hits still go out after Decline (no cookies). Decide whether that is acceptable or the container must block them.
 - [ ] Internal and developer traffic filters created in Testing state, then Active after checking (our test visits are in the data).
 - [ ] "Cookie settings" link in the footer calls `window.mkConsentOpen()` (needs a template edit).
-- [ ] Lighthouse mobile median re-measured with `lh-range.mjs` and compared with the 94 to 99 range before tags.
+- [ ] Lighthouse mobile median re-measured with `lh-range.mjs` and compared with the 94 to 99 range before tags. 2026-11-28: mobile 89-90 median 90 with Google tags allowed, mobile 90 median 90 with GA blocked, desktop 100. The drop is not from GA. Cause not isolated yet (changes since the 95 median: vendor files self-hosted, GTM snippet, cookie banner, WhatsApp button, noscript copy).
 - [ ] Setup screenshots saved in `evidence/` with an `INDEX.md` row each.
 
 ---
