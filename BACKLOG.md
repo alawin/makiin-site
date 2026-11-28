@@ -35,7 +35,7 @@ Install GA4 (and GTM if Jivan wants it), define conversion events, send `page_vi
 **Plan:** none yet
 
 - [ ] Property verified for `www.makiinstudio.com`.
-- [ ] `sitemap.xml` (16 URLs) submitted in Search Console and Bing Webmaster.
+- [x] `sitemap.xml` (16 URLs) submitted in Search Console: status Success, 16 discovered pages, last read 2026-11-28 (evidence/). Bing: Jivan to submit, not confirmed.
 - [ ] Indexing requested once per URL after the last copy change.
 - [ ] Bot hits and indexing re-checked 3 to 5 days later with `cf-bot-hits.py`.
 
