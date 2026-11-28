@@ -623,6 +623,7 @@ div:has(>[data-chstate]){flex-wrap:wrap!important;gap:4px 16px!important}
 
     <div style="display:flex;justify-content:space-between;gap:24px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8E9694">
       <span>{{ L.copyright }}</span>
+      <button type="button" data-mk-cookie="" style="margin:-12px 0;padding:12px 0;background:none;border:0;cursor:pointer;font:inherit;letter-spacing:inherit;text-transform:inherit;color:#E8E2D8">{{ L.cookieSettings }}</button>
       <a href="#top" style="color:#E8E2D8">{{ L.top }}</a>
     </div>
   </div>
@@ -783,6 +784,7 @@ class Component extends DCLogic {
       galleryB: "Feel the emotional connection through thoughtful spaces that invite interaction and community. Our projects are not just buildings; they are places where memories are made and lives are enriched.",
       contactIntro: "Based in Bandung, MAKIIN is here to help you create your dream spaces, no matter where you are. We invite you to reach out and explore the possibilities with us.",
       copyright: "\u00A9 2026 MAKIIN. All rights reserved.",
+      cookieSettings: "Cookie settings",
       philo: 'Philosophy', services: 'Services', navWork: 'Work', work: 'Selected Work', studio: 'Studio', hero: 'Hero', gallery: 'Project',
       scroll: 'Scroll to read the site', framed: 'Framed view', reading: 'Reading of the site', method: 'Method', index: 'Index', tilt: 'Move to tilt the plane — select a pane to open',
       principal: 'Principal', location: 'Location', sheet: 'Sheet', practice: 'Practice', enquiries: 'Enquiries', coords: 'Coordinates', time: 'Local time', top: 'Back to top ↑',
@@ -799,6 +801,7 @@ class Component extends DCLogic {
       galleryB: "Rasakan keterhubungan emosional melalui ruang yang dirancang dengan memikirkan interaksi dan komunitas. Proyek kami bukan hanya bangunan; mereka adalah tempat di mana kenangan diciptakan dan kehidupan diperkaya.",
       contactIntro: "Berbasis di Bandung, MAKIIN hadir untuk membantu Anda mewujudkan ruang impian, di mana pun Anda berada. Kami mengajak Anda untuk menghubungi dan menjelajahi kemungkinan bersama kami.",
       copyright: "\u00A9 2026 MAKIIN. All rights reserved.",
+      cookieSettings: "Pengaturan cookie",
       philo: 'Filosofi', services: 'Layanan', navWork: 'Karya', work: 'Karya Terpilih', studio: 'Studio', hero: 'Beranda', gallery: 'Proyek',
       scroll: 'Gulir untuk membaca tapak', framed: 'Bingkai pandang', reading: 'Membaca tapak', method: 'Metode', index: 'Indeks', tilt: 'Gerakkan untuk memiringkan bidang — pilih panel untuk membuka',
       principal: 'Prinsipal', location: 'Lokasi', sheet: 'Lembar', practice: 'Praktik', enquiries: 'Kontak', coords: 'Koordinat', time: 'Waktu setempat', top: 'Kembali ke atas ↑',
@@ -1330,15 +1333,30 @@ class Component extends DCLogic {
     var cs = getComputedStyle(el);
     return cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) === 0;
   }
+  function clearGa() {
+    var past = 'expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+    var parts = location.hostname.split('.');
+    var doms = [location.hostname, '.' + location.hostname, '.' + parts.slice(-2).join('.')];
+    document.cookie.split('; ').forEach(function (c) {
+      var n = c.split('=')[0];
+      if (n !== '_ga' && n.indexOf('_ga_') !== 0) return;
+      document.cookie = n + '=; ' + past;
+      doms.forEach(function (d) { document.cookie = n + '=; ' + past + '; domain=' + d; });
+    });
+  }
   function show() { paint(); box.hidden = false; }
   window.mkConsentOpen = show;
+  document.addEventListener('click', function (e) { if (e.target.closest('[data-mk-cookie]')) show(); });
   box.addEventListener('click', function (e) {
     var b = e.target.closest('button[data-v]');
     if (!b) return;
     var v = b.getAttribute('data-v');
     save(v);
-    if (v === 'granted') window.mkLoadGtm(); else gtag('consent', 'update', { 'analytics_storage': 'denied' });
     box.hidden = true;
+    if (v === 'granted') { window.mkLoadGtm(); return; }
+    gtag('consent', 'update', { 'analytics_storage': 'denied' });
+    clearGa();
+    if (window.__mkGtm) location.reload();
   });
   new MutationObserver(paint).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
   if (stored() === 'granted' || stored() === 'denied') return;
