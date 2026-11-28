@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-K5J3TQZ4"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied'
+  });
+  try {
+    var mkc = localStorage.getItem('mk-consent');
+    if (mkc === 'granted' || mkc === 'denied') gtag('consent', 'update', { 'analytics_storage': mkc });
+  } catch (e) {}
   gtag('js', new Date());
 </script>
+<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-K5J3TQZ4"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!--mk:head-->
@@ -1278,6 +1288,58 @@ class Component extends DCLogic {
     return vals;
   }
 }
+</script>
+<style>
+#mk-consent{position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;max-width:520px;padding:20px;background:#0A0C0C;color:#E8E2D8;font-family:'Outfit',sans-serif;font-weight:300;font-size:16px;line-height:1.5;box-shadow:0 8px 32px rgba(0,0,0,.35)}
+#mk-consent[hidden]{display:none}
+#mk-consent p{margin:0 0 16px}
+#mk-consent .mk-c-row{display:flex;gap:12px}
+#mk-consent button{flex:1;min-height:44px;padding:10px 16px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border:1px solid #E8E2D8;background:transparent;color:#E8E2D8}
+#mk-consent button[data-v="granted"]{background:#E8E2D8;color:#0A0C0C}
+#mk-consent button:hover{background:#FFFFFF;color:#0A0C0C}
+#mk-consent button:focus-visible{outline:2px solid #E0B173;outline-offset:3px}
+</style>
+<div id="mk-consent" role="dialog" aria-label="Cookies" hidden>
+<p data-l="en">We use Google Analytics to count visits and see how people use this site. It sets cookies on your device. Do you allow it?</p>
+<p data-l="id" hidden>Kami memakai Google Analytics untuk menghitung kunjungan dan melihat bagaimana situs ini dipakai. Ini memasang cookie di perangkat Anda. Apakah Anda mengizinkan?</p>
+<div class="mk-c-row">
+<button type="button" data-v="granted"><span data-l="en">Allow</span><span data-l="id" hidden>Izinkan</span></button>
+<button type="button" data-v="denied"><span data-l="en">Decline</span><span data-l="id" hidden>Tolak</span></button>
+</div>
+</div>
+<script>
+(function () {
+  var box = document.getElementById('mk-consent');
+  function stored() { try { return localStorage.getItem('mk-consent'); } catch (e) { return null; } }
+  function save(v) { try { localStorage.setItem('mk-consent', v); } catch (e) {} }
+  function lang() { return document.documentElement.lang === 'id' ? 'id' : 'en'; }
+  function paint() {
+    var l = lang();
+    box.querySelectorAll('[data-l]').forEach(function (n) { n.hidden = n.getAttribute('data-l') !== l; });
+  }
+  function loaderDone() {
+    var el = document.querySelector('[data-loader]');
+    if (!el) return true;
+    var cs = getComputedStyle(el);
+    return cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) === 0;
+  }
+  function show() { paint(); box.hidden = false; }
+  window.mkConsentOpen = show;
+  box.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-v]');
+    if (!b) return;
+    var v = b.getAttribute('data-v');
+    save(v);
+    gtag('consent', 'update', { 'analytics_storage': v });
+    box.hidden = true;
+  });
+  new MutationObserver(paint).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  if (stored() === 'granted' || stored() === 'denied') return;
+  var tries = 0;
+  (function wait() {
+    if (loaderDone() || ++tries > 50) show(); else setTimeout(wait, 300);
+  })();
+})();
 </script>
 </body>
 </html>
